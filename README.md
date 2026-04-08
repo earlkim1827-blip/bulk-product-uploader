@@ -21,11 +21,12 @@
 | 항목 | 버전 |
 |------|------|
 | Python | 3.13.3 (64-bit) |
-| tkinter | 8.6 (Python 기본 내장) |
+| PyQt5 | 5.15.11 |
 
 ### 주요 패키지
 | 패키지 | 버전 | 용도 |
 |--------|------|------|
+| PyQt5 | 5.15.11 | GUI 프레임워크 |
 | pandas | 3.0.2 | 엑셀 데이터 파싱 |
 | openpyxl | 3.1.5 | 엑셀 파일 읽기/쓰기 |
 | requests | 2.33.1 | HTTP API 통신 |
@@ -223,6 +224,7 @@ pyinstaller --onefile --windowed --name 대량등록솔루션 main.py
 ### 🔴 필수 (MVP)
 
 - [x] 프로젝트 폴더 구조 설계
+- [x] GUI 프레임워크 tkinter → **PyQt5 전환**
 - [x] 공통 상품 데이터 모델 (`Product`, `ProductOption`)
 - [x] 엑셀 파싱 모듈 (`excel_reader.py`)
 - [x] 멀티 플랫폼 업로드 관리자 (`uploader.py`)
@@ -294,6 +296,39 @@ pyinstaller --onefile --windowed --name 대량등록솔루션 main.py
 | `api/coupang.py` | 동일 문제 | `access_key=""`, `secret_key=""`, `vendor_id=""` 기본값 추가 |
 | `api/gmarket.py` | 동일 문제 | `app_key=""`, `cert_key=""`, `seller_id=""` 기본값 추가 |
 | `api/auction.py` | 동일 문제 | `app_key=""`, `cert_key=""`, `seller_id=""` 기본값 추가 |
+
+#### 🔜 다음 작업 (우선순위 순)
+
+1. **실제 API 키로 각 플랫폼 연동 테스트** — 각 쇼핑몰 판매자 계정에서 API 키 발급 후 실제 등록 검증
+2. **카테고리 코드 매핑** — 플랫폼별 카테고리 ID 조회 및 자동 변환 기능
+3. **등록 결과 리포트** — 성공/실패 내역을 엑셀로 저장하는 기능
+4. **API 연결 테스트 버튼** — 설정 화면에서 저장 전 연결 확인 가능하도록 개선
+
+---
+
+### v0.2.0 — 2026-04-08 (GUI 프레임워크 전환)
+
+#### ✅ 완료된 작업
+
+| 분류 | 파일 | 내용 |
+|------|------|------|
+| GUI | `gui/main_window.py` | tkinter → PyQt5 `QMainWindow` 기반으로 전면 재작성 |
+| GUI | `gui/settings_window.py` | tkinter → PyQt5 `QDialog` 기반으로 전면 재작성 |
+| 진입점 | `main.py` | `tk.Tk()` → `QApplication` + `QFont` 초기화로 변경 |
+| 패키지 | `requirements.txt` | `PyQt5>=5.15.0` 추가 |
+
+#### 🔧 변경 상세
+
+| 항목 | 변경 전 | 변경 후 |
+|------|---------|---------|
+| GUI 프레임워크 | tkinter 8.6 | PyQt5 5.15.11 |
+| 스타일링 방식 | ttk 기본 테마 | QSS (Qt Style Sheets) 커스텀 |
+| 비동기 처리 | `threading.Thread` | `QThread` + `pyqtSignal` |
+| 다이얼로그 | `tk.Toplevel` | `QDialog` (exec_ 모달) |
+| 파일 선택 | `tkinter.filedialog` | `QFileDialog` |
+| 로그 출력 | `tk.Text` | `QTextEdit` (HTML 컬러 지원) |
+| 진행바 | `ttk.Progressbar` | `QProgressBar` |
+| 테이블 | `ttk.Treeview` | `QTableWidget` |
 
 #### 🔜 다음 작업 (우선순위 순)
 

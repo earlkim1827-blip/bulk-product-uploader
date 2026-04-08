@@ -1,11 +1,10 @@
 """
-상품 대량등록 솔루션 - 진입점
+상품 대량등록 솔루션 - 진입점 (PyQt5)
 """
 import os
 import sys
 import logging
 
-# 프로젝트 루트 경로 설정
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, ROOT_DIR)
 
@@ -20,12 +19,17 @@ logging.basicConfig(
     ]
 )
 
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtGui import QFont
 from gui.main_window import MainWindow
 
 
 def main():
-    app = MainWindow()
-    app.mainloop()
+    app = QApplication(sys.argv)
+    app.setFont(QFont("맑은 고딕", 10))
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec_())
 
 
 if __name__ == "__main__":

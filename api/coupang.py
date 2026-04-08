@@ -26,7 +26,7 @@ class CoupangClient(BaseAPIClient):
         self.secret_key = ""
         self.vendor_id = ""
 
-    def configure(self, access_key: str, secret_key: str, vendor_id: str):
+    def configure(self, access_key: str = "", secret_key: str = "", vendor_id: str = "", **kwargs):
         self.access_key = access_key
         self.secret_key = secret_key
         self.vendor_id = vendor_id

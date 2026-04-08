@@ -23,7 +23,7 @@ class SmartStoreClient(BaseAPIClient):
         self.client_secret = ""
         self.access_token = ""
 
-    def configure(self, client_id: str, client_secret: str):
+    def configure(self, client_id: str = "", client_secret: str = "", **kwargs):
         self.client_id = client_id
         self.client_secret = client_secret
         self._is_configured = bool(client_id and client_secret)

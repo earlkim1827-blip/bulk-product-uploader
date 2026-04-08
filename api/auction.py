@@ -22,7 +22,7 @@ class AuctionClient(BaseAPIClient):
         self.cert_key = ""
         self.seller_id = ""
 
-    def configure(self, app_key: str, cert_key: str, seller_id: str):
+    def configure(self, app_key: str = "", cert_key: str = "", seller_id: str = "", **kwargs):
         self.app_key = app_key
         self.cert_key = cert_key
         self.seller_id = seller_id
