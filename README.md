@@ -11,6 +11,7 @@
 3. [배포 환경](#3-배포-환경)
 4. [디자인 가이드](#4-디자인-가이드)
 5. [TODO 리스트](#5-todo-리스트)
+6. [변경 이력](#6-변경-이력)
 
 ---
 
@@ -233,6 +234,8 @@ pyinstaller --onefile --windowed --name 대량등록솔루션 main.py
 - [x] GUI 메인 화면
 - [x] API 키 설정 화면
 - [x] 상품 등록 엑셀 템플릿
+- [x] GitHub 저장소 생성 및 초기 코드 업로드
+- [x] 프로젝트 문서화 (README)
 - [ ] 각 플랫폼 API 실전 테스트 (실제 API 키로 검증)
 - [ ] 카테고리 코드 매핑 (플랫폼별 카테고리 ID 자동 변환)
 
@@ -245,6 +248,7 @@ pyinstaller --onefile --windowed --name 대량등록솔루션 main.py
 - [ ] 플랫폼별 카테고리 검색 UI
 - [ ] 재시도 로직 (실패 건 자동 재등록)
 - [ ] 등록 속도 조절 (API 호출 간격 설정)
+- [ ] API 연결 테스트 버튼 (설정 화면에서 바로 확인)
 
 ### 🟢 고도화 (v2.0)
 
@@ -257,4 +261,47 @@ pyinstaller --onefile --windowed --name 대량등록솔루션 main.py
 
 ---
 
-*최초 작성: 2026-04-08*
+## 6. 변경 이력
+
+### v0.1.0 — 2026-04-08 (초기 개발)
+
+#### ✅ 완료된 작업
+
+| 분류 | 파일 | 내용 |
+|------|------|------|
+| 구조 | 전체 폴더 | `core/`, `api/`, `gui/`, `templates/`, `logs/` 디렉토리 생성 |
+| 모델 | `core/product_model.py` | 공통 상품 데이터 클래스 `Product`, `ProductOption` 구현 |
+| 파싱 | `core/excel_reader.py` | 엑셀 → `Product` 객체 변환, 유효성 검사, 오류 수집 |
+| 업로드 | `core/uploader.py` | 멀티 플랫폼 비동기 업로드, 진행 콜백, 결과 요약 |
+| API | `api/base.py` | 공통 베이스 클래스, HTTP 요청 래퍼, 성공/실패 응답 형식 |
+| API | `api/smartstore.py` | 스마트스토어 OAuth2 인증 + 상품 등록 페이로드 |
+| API | `api/coupang.py` | 쿠팡 HMAC-SHA256 서명 인증 + 상품 등록 페이로드 |
+| API | `api/st11.py` | 11번가 API Key 인증 + 상품 등록 페이로드 |
+| API | `api/gmarket.py` | 지마켓 ESM Plus 인증 + 상품 등록 페이로드 |
+| API | `api/auction.py` | 옥션 ESM Plus 인증 + 상품 등록 페이로드 |
+| GUI | `gui/main_window.py` | 메인 화면 (파일선택·플랫폼선택·미리보기·진행바·로그) |
+| GUI | `gui/settings_window.py` | API 키 입력·저장 설정 화면 (탭 구성) |
+| 기타 | `templates/상품등록_템플릿.xlsx` | 컬럼 정의 + 샘플 2행 + 작성가이드 시트 포함 |
+| 기타 | `.gitignore` | `config.json`, `logs/`, `__pycache__` 등 제외 |
+| 기타 | `requirements.txt` | `pandas`, `openpyxl`, `requests` 버전 고정 |
+| 배포 | GitHub | `bulk-product-uploader` 저장소 생성 및 전체 코드 푸시 |
+
+#### 🔧 수정된 사항
+
+| 파일 | 문제 | 수정 내용 |
+|------|------|----------|
+| `api/smartstore.py` | API 키 미설정 시 `configure()` 필수 인자 누락으로 `TypeError` 발생 | `client_id=""`, `client_secret=""` 기본값 추가, `**kwargs` 흡수 |
+| `api/coupang.py` | 동일 문제 | `access_key=""`, `secret_key=""`, `vendor_id=""` 기본값 추가 |
+| `api/gmarket.py` | 동일 문제 | `app_key=""`, `cert_key=""`, `seller_id=""` 기본값 추가 |
+| `api/auction.py` | 동일 문제 | `app_key=""`, `cert_key=""`, `seller_id=""` 기본값 추가 |
+
+#### 🔜 다음 작업 (우선순위 순)
+
+1. **실제 API 키로 각 플랫폼 연동 테스트** — 각 쇼핑몰 판매자 계정에서 API 키 발급 후 실제 등록 검증
+2. **카테고리 코드 매핑** — 플랫폼별 카테고리 ID 조회 및 자동 변환 기능
+3. **등록 결과 리포트** — 성공/실패 내역을 엑셀로 저장하는 기능
+4. **API 연결 테스트 버튼** — 설정 화면에서 저장 전 연결 확인 가능하도록 개선
+
+---
+
+*최초 작성: 2026-04-08 / 마지막 수정: 2026-04-08*
